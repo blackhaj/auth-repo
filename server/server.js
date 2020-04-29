@@ -3,6 +3,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const fs = require('fs');
 
 const userController = require('./controllers/userController');
 const cookieController = require('./controllers/cookieController');
@@ -59,18 +60,22 @@ app.get('/signup', (req, res) => {
   res.render('./../client/signup', {error: null});
 });
 
-app.post('/signup', userController.createUser , (req, res) => {
-  // what should happen here on successful sign up?
-
+app.post('/signup', 
+  userController.createUser, 
+  userController.getAllUsers, 
+  (req, res) => {
+    // what should happen here on successful sign up?
+    res.redirect(200, '/secret')
 });
 
 
 /**
 * login
 */
-app.post('/login', userController.verifyUser, (req, res) => {
-  // what should happen here on successful log in?
-
+app.post('/login', 
+  userController.verifyUser,  
+  (req, res) => {
+    res.redirect(200, '/secret')
 });
 
 

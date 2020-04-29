@@ -23,7 +23,17 @@ userController.getAllUsers = (req, res, next) => {
 */
 userController.createUser = (req, res, next) => {
   // write code here
-
+  if (typeof(req.body['username']) === 'string' && typeof(req.body['password']) === 'string'){
+    User.create(req.body, (err, newUser) => {
+      if (err) {
+        res.render("./../client/signup", { error: err });
+        return next("Error in userController.createUser: " + JSON.stringify(err))
+      };
+      return next();
+    })
+  } else {
+    return next('you screwed up')
+  }
 };
 
 /**
@@ -32,8 +42,14 @@ userController.createUser = (req, res, next) => {
 * against the password stored in the database.
 */
 userController.verifyUser = (req, res, next) => {
-  // write code here
-
+  User.findOne({ username: req.body['username'], password: req.body['password']}, function(err, user){
+    if (err || !user){
+      res.render("./../client/signup", { error: err });
+      return next('error in verifying user')
+    } else {
+      return next();
+    }
+  })
 };
 
 module.exports = userController;
