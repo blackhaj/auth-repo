@@ -78,6 +78,13 @@ app.post('/login',
     res.redirect(200, '/secret')
 });
 
+app.get('/callback',
+  userController.getGithubToken,
+  sessionController.startSession,
+  userController.getUserProfile,
+  (req, res) => {
+    res.render('./../client/profile', res.locals.profile);
+})
 
 /**
 * Authorized routes
